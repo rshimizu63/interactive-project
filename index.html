@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>material source trade data</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-sankey/0.12.3/d3-sankey.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <link rel="stylesheet" href="src/theme.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+<section class="container is-max-widescreen">
+    <h1 class = "main_title">How do the world's critical mineral flow? </h1>
+    <p class = "body_text">Do you know that critical minerals such as rare metals and rare earth are used in almost all products that support our daily lives, including electronic and IT devices, automobiles, and medical equipment? These resources, essential components for semiconductors, batteries, and other technologies, are indispensable for sustaining our socio-economic activities.</p>
+    <p class = "body_text">On the other hand, the countries where these minerals are produced, as well as those carrying out refining and processing, tend to be concentrated in a small number of nations. Overreliance on a limited number of regions may increase the risk of supply disruptions due to local conflicts, socio-economic instability, and trade friction and disputes.</p>
+    <p class = "body_text">This site allows you to explore the flows of each resource (based on HS codes) between countries using an interactive Sankey diagram. It might serves as an opportunity to learn about how to ensure a stable supply of these critical resources for each country.</p>
+
+    <div class = "chartbox">
+        <label for="selectyear">Year:</label>
+        <select class = "selectpulldown" id="selectyear">
+            <option value="2024">2024</option>
+            <option value="2023">2023</option>
+            <option value="2022">2022</option>
+        </select>
+
+
+        <!-- add comment -->
+        <label for="selectproduct">Resources:</label>
+        <select class = "selectpulldown" id="selectproduct"></select>
+
+        <script>
+            const metalOptions = [
+                "Gold",
+                "Silver", 
+                "Platinum",  
+                "Tungsten", 
+                "Molybdenum",
+                "Tantalum", 
+                "Magnesium", 
+                "Cobalt",
+                "Bismuth",
+                "Titanium",
+                "Zirconium",
+                "Antimony", 
+                "Manganese",
+                ];
+
+            const selectOption = document.getElementById("selectproduct");
+
+            metalOptions.forEach(option => {
+            const optionMetal = document.createElement("option");
+            optionMetal.value = option;
+            optionMetal.text = option;
+            selectproduct.appendChild(optionMetal);
+        }); 
+        </script>
+
+        <label for="selecttopN">How many top countries to show:</label>
+        <select class = "selectpulldown" id="selecttopN">
+            <option value=5>5</option>
+            <option value=10>10</option>
+            <option value=15>15</option>
+        </select>
+    
+
+        <button class="button" id="updateButton">Update</button>
+    </div>
+
+    <div id="sankeyContainer"></div>
+
+        <script src="src/sankey.js"></script>
+        <script src="src/main.js"></script>
+    
+    <blockquote class = "reference">Data Source: "UN Comtrade Database" 
+      —  <a href = "https://comtradeplus.un.org/">https://comtradeplus.un.org/</a>
+    </blockquote>
+</section>
+</body>
+</html>
