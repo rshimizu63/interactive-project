@@ -6,7 +6,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-sankey/0.12.3/d3-sankey.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"> -->
     <link rel="stylesheet" href="src/theme.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,27 +16,58 @@
 
 </head>
 <body>
-<section class="container is-max-widescreen">
+<section class="container">
     <h1 class = "main_title">How do the world's critical mineral flow? </h1>
     <p class = "body_text">Do you know that critical minerals such as rare metals and rare earth are used in almost all products that support our daily lives, including electronic and IT devices, automobiles, and medical equipment? These resources, essential components for semiconductors, batteries, and other technologies, are indispensable for sustaining our socio-economic activities.</p>
     <p class = "body_text">On the other hand, the countries where these minerals are produced, as well as those carrying out refining and processing, tend to be concentrated in a small number of nations. Overreliance on a limited number of regions may increase the risk of supply disruptions due to local conflicts, socio-economic instability, and trade friction and disputes.</p>
     <p class = "body_text">This site allows you to explore the flows of each resource (based on HS codes) between countries using an interactive Sankey diagram. It might serves as an opportunity to learn about how to ensure a stable supply of these critical resources for each country.</p>
+    <div class = material-box>
+        <p class = "body_text">(A typical use case for rare metals)<br>
+                                Semiconductor materials: Tungsten, Molybdenum, Tantalum, Antimony<br>
+                                Battery materials: Lithium, Nickel, Cobalt, Manganese<br>
+                                Lightweight alloys: Magnesium<br>
+                                Pharmaceuticals: Bismuth<br>
+                                Nuclear reactor cladding: Zirconium<br>
+                                Aircraft components: Titanium<br>
+        </p>
+    </div>
 
-    <div class = "chartbox">
+    <div class = example-box>
+        <h2 class = "middle_title">Input example </h2>
+        <ul>
+            <li class = example><a href="#input1" id="example1">Year:2024, Resource: Lithium carbonate</a> </li>
+            <p class = "body_text">Lithium is an essential material for batteries, and its demand has surged in recent years due to the growing adoption of electric vehicles. The flows of both exports and imports are highly concentrated among a few countries.</p>
+
+            <li class = example><a href="#input1" id="example2">Year:2020, Resource: Nickel</a> and <a href="#input1" id="example3">Year:2024, Resource: Nickel</a> </li>
+            <p class = "body_text"> Nickel is also one of the key components of electric vehicle batteries, and Russia had previously held a significant share of global supply. However, due to the invasion of Ukraine and the resulting sanctions, exports from Russia have declined sharply, leading to major changes in the structure of the supply chain.</p>
+        </ul>
+    </div>
+
+    <div class = "chartbox", id = "input1">
         <label for="selectyear">Year:</label>
-        <select class = "selectpulldown" id="selectyear">
-            <option value="2024">2024</option>
-            <option value="2023">2023</option>
-            <option value="2022">2022</option>
-        </select>
+        <select class = "selectpulldown" id="selectyear"></select>
+
+        <script>
+            const year_list = Array.from({length: 10}, (_, idx) => 2024 - idx);
+            d3
+                .select("#selectyear")
+                .selectAll("option")
+                .data(year_list)
+                .join("option")
+                .attr("value", (d,i) => d)
+                .text((d,i) => d)
+        
+        </script>
 
 
-        <!-- add comment -->
         <label for="selectproduct">Resources:</label>
         <select class = "selectpulldown" id="selectproduct"></select>
 
         <script>
             const metalOptions = [
+                "Lithium carbonate",
+                "Lithium hydroxide",
+                "Nickel",
                 "Gold",
                 "Silver", 
                 "Platinum",  
@@ -52,14 +83,15 @@
                 "Manganese",
                 ];
 
-            const selectOption = document.getElementById("selectproduct");
+            // const selectOption = document.getElementById("selectproduct");
 
-            metalOptions.forEach(option => {
-            const optionMetal = document.createElement("option");
-            optionMetal.value = option;
-            optionMetal.text = option;
-            selectproduct.appendChild(optionMetal);
-        }); 
+            d3
+            .select("#selectproduct")
+            .selectAll("option")
+            .data(metalOptions)
+            .join("option")
+            .attr("value", (d,i) => d)
+            .text((d,i) => d); 
         </script>
 
         <label for="selecttopN">How many top countries to show:</label>
@@ -72,15 +104,81 @@
 
         <button class="button" id="updateButton">Update</button>
     </div>
+    
+    <div class = "sankey-wrapper">
+        <div class = "unit">(Value: USD)</div>            
+        <div class = "sub-grid">
+            <div class="sankey-label left">Export</div>
+            <div class="sankey-label right">Import</div>
+        </div>
+        <div id="sankeyContainer"></div>
+    </div>
+    
+    <h2 class = "middle_title">Choose your favorite countries </h2>
+    <p class = "body_text">You can select any countries you like from the dropdown.(Hold Ctrl while selecting on Windows, or Command on Mac.)</p>
+    
+    <div class = "sankey-wrapper2">
+        <div class = countryDropdown>
+            <select id="countryFilter" multiple size="30"></select>
+            <script src="src/countries.js"></script>
+            <script>             
+                d3
+                .select("#countryFilter")
+                .selectAll("option")
+                .data(countries)
+                .join("option")
+                .attr("value", (d,i) => d)
+                .text((d,i) => d); 
+            </script>
+        </div>
+        <div class = "sankey-wrapper">
+            <div class = "chartbox">
+                <label for="selectyear2">Year:</label>
+                <select class = "selectpulldown" id="selectyear2"></select>
 
-    <div id="sankeyContainer"></div>
+                <script>
+                    d3
+                        .select("#selectyear2")
+                        .selectAll("option")
+                        .data(year_list)
+                        .join("option")
+                        .attr("value", (d,i) => d)
+                        .text((d,i) => d)
+                
+                </script>
 
-        <script src="src/sankey.js"></script>
-        <script src="src/main.js"></script>
+
+                <label for="selectproduct2">Resources:</label>
+                <select class = "selectpulldown" id="selectproduct2"></select>
+
+                <script>
+                    d3
+                    .select("#selectproduct2")
+                    .selectAll("option")
+                    .data(metalOptions)
+                    .join("option")
+                    .attr("value", (d,i) => d)
+                    .text((d,i) => d); 
+                </script>                
+
+                <button class="button" id="updateButton2">Update</button>
+            </div>
+            <div class = "unit">(Value: USD)</div>            
+            <div class = "sub-grid">
+                <div class="sankey-label left">Export</div>
+                <div class="sankey-label right">Import</div>
+            </div>
+            <div id="sankeyContainer2"></div>
+        </div>
+    </div>
     
     <blockquote class = "reference">Data Source: "UN Comtrade Database" 
       —  <a href = "https://comtradeplus.un.org/">https://comtradeplus.un.org/</a>
     </blockquote>
+
+    <script src="src/sankey.js"></script>
+    <script src="src/main.js"></script>
+    <script src="src/main2.js"></script>
 </section>
 </body>
 </html>

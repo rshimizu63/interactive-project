@@ -1,3 +1,13 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    padding: 0 100px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
 .main_title {color: navy;
     font-family: "Anton", sans-serif;
     font-optical-sizing: auto;
@@ -9,6 +19,17 @@
     margin-bottom: 20px;
 }
 
+.middle_title {color: navy;
+    color: black;
+    font-family: "Roboto", sans-serif;
+    font-size: 35px;
+    font-weight: 500;
+    letter-spacing: 0.12px;
+    font-style: normal;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
 .body_text {
     color: black;
     font-family: "Roboto", sans-serif;
@@ -16,8 +37,31 @@
     font-weight: 200;
     letter-spacing: 0.12px;
     font-style: normal;
+    text-align: left;
     margin-top: 10px;
     margin-bottom: 5px;
+}
+
+.material-box{
+    margin: 5px 5px;
+    border: 1px solid black;
+    padding: 0 20px;
+}
+
+
+.example-box{
+    margin: 30px 20px;
+    border: 1px dashed black;
+    padding: 0 20px;
+}
+
+.example {
+    font-family: "Roboto", sans-serif;
+    font-size: 20px;
+    font-weight: 200;
+    letter-spacing: 0.12px;
+    font-style: normal;
+    text-align: left;
 }
 
 .chartbox {
@@ -50,9 +94,54 @@
 }
 
 .reference {
+    width: 100%;
     font-family: "Roboto", sans-serif;
     font-size: 12px;
     font-weight: 80;
+    text-align: left;
     font-style: normal;
     margin-bottom: 10px;
+}
+
+.sankey-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.unit {
+    width: 100%;
+    text-align: right;
+    font-size: 12px;
+}
+.sub-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    justify-items: stretch;
+    column-gap: 0;  
+    }
+    
+.sankey-label {
+    width: 60px;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.sankey-label.left {
+  text-align: right;
+  margin-left: 5px;
+}
+
+.sankey-label.right {
+  width: 100%;
+  text-align: right; 
+}
+
+.sankey-wrapper2 {
+  display: grid;
+    grid-template-columns: 0.2fr auto;
+    width: 100%;
+    justify-items: stretch;
+    column-gap: 0; 
 }
