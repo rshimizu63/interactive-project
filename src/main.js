@@ -18,7 +18,7 @@ async function main() {
     }
 main();
 
-
+// Choosing top N countries to show
 function selectingtop(selectedData, topN){
 
     const totalExport = {};
@@ -44,13 +44,16 @@ function selectingtop(selectedData, topN){
     return [topExport, topImport]
 }
 
+
 function createLinksandNodes(selectedData, excountry, imcountry){
+    // Grouping unselected countries under "Others"
     const selectedLinks = selectedData.map(d => {
         const source = excountry.includes(d.source) ? d.source:"Others";
         const target = imcountry.includes(d.target) ? d.target:"Others";
         return {source:source + "(Ex)", target:target + "(Im)", value:d.value}
     })
 
+    // Merging duplicate country entries into one link
     const integratedLinks = {};
     for (const l of selectedLinks){
         const key = l.source + "%" + l.target;
@@ -84,6 +87,7 @@ function updateChart() {
 
     const {links, nodes} = createLinksandNodes(selected, topExport, topImport)
 
+    // Creating order list to sort countries in descending order based on trade value.
     let orderList = topExport.map(d => d+"(Ex)")
         .concat(topImport.map(d => d + "(Im)"));
     orderList.push("Others(Ex)", "Others(Im)")
@@ -114,6 +118,7 @@ function updateChart() {
 // Updating by pressing a button
 document.getElementById("updateButton").addEventListener("click", updateChart);
 
+// Updating by pressing an example link
 function runexample(exyear, exproduct){
     const year = document.getElementById("selectyear");
     const product = document.getElementById("selectproduct");

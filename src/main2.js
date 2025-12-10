@@ -37,6 +37,7 @@ function updatecountryChart() {
 
     const [exportCountries, importCountries] = sortedcountry(selected, countries);
 
+    // Creating order list to sort countries in descending order based on trade value.
     let orderList = exportCountries.map(d => d+"(Ex)")
         .concat(importCountries.map(d => d + "(Im)"));
     orderList.push("Others(Ex)", "Others(Im)")
